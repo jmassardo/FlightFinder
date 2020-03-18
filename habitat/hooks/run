@@ -1,0 +1,3 @@
+# Load up the service in Kestrel using the Hab provided dotnet-asp-core instance
+
+Start-Process {{pkgPathFor "core/dotnet-asp-core"}}\bin\dotnet.exe -Wait -ArgumentList "{{pkg.path}}\www\FlightFinder.Server.dll --server.urls=http://*.{{cfg.port}}"

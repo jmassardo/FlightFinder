@@ -1,0 +1,33 @@
+trigger:
+  - master
+
+stages:
+  - stage: Build
+    jobs:
+    - job: Build
+      pool:
+        name: Hosted VS2017
+      continueOnError: true
+      steps:
+      - task: vsts-habitat-install@3
+      - task: vsts-habitat-signing-key@3
+        displayName: 'Signing Origin Key: install'
+        inputs:
+          habitatOrigin: bldr
+      - task: vsts-habitat-build@3
+        displayName: 'Build Habitat plan'
+        inputs:
+          habitatOrigin: bldr
+        env:
+          HAB_LICENSE: accept-no-persist
+      - task: vsts-habitat-expose-habitat-build-vars@3
+        displayName: 'Expose Habitat Build Variables'
+        inputs:
+          habitatSetBuildNumber: true
+      - publish: $(System.DefaultWorkingDirectory)/results
+        artifact: hart
+      - task: vsts-habitat-pkg-export@3
+        inputs:
+          habitatOrigin: 'bldr'
+          habitatExportFormat: 'docker'
+          habitatPackagePath: '$(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart'

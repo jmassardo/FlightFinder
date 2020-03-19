@@ -27,7 +27,7 @@ stages:
       - powershell: |
           . $(System.DefaultWorkingDirectory)/results/last_build.ps1
           C:\ProgramData\habitat\hab.exe pkg export docker $(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart
-          docker tag jmassardo/flightfinder jrmregistry.azurecr.io/jmassardo/flightfinder
+          docker tag jmassardo/flightfinder jrmregistry.azurecr.io/flightfinder
         displayName: 'Export HART to Docker'
         env:
           HAB_LICENSE: accept-no-persist

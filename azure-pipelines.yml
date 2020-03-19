@@ -35,7 +35,7 @@ stages:
           containerRegistry: 'acs'
           repository: 'flightfinder'
           command: 'push'
-          tags: 'jmassardo/flightfinder:latest'
+          tags: 'latest'
       # - publish: $(System.DefaultWorkingDirectory)/results
       #   artifact: hart
       # - task: vsts-habitat-pkg-export@3

@@ -24,15 +24,21 @@ stages:
         displayName: 'Expose Habitat Build Variables'
         inputs:
           habitatSetBuildNumber: true
-      - publish: $(System.DefaultWorkingDirectory)/results
-        artifact: hart
-      - task: vsts-habitat-pkg-export@3
-        displayName: 'Export HART to Docker'
-        inputs:
-          habitatOrigin: 'bldr'
-          habitatExportFormat: 'docker'
-          habitatPackagePath: '$(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart'
-          habitatPackageChannel: 'stable'
-          habitatArguments:
+      - powershell: |
+          . $(System.DefaultWorkingDirectory)/results/last_build.ps1
+          C:\ProgramData\habitat\hab.exe pkg export docker $(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart
+        displayName: 'Promote to Stage'
         env:
           HAB_LICENSE: accept-no-persist
+      # - publish: $(System.DefaultWorkingDirectory)/results
+      #   artifact: hart
+      # - task: vsts-habitat-pkg-export@3
+      #   displayName: 'Export HART to Docker'
+      #   inputs:
+      #     habitatOrigin: 'bldr'
+      #     habitatExportFormat: 'docker'
+      #     habitatPackagePath: '$(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart'
+      #     habitatPackageChannel: 'stable'
+      #     habitatArguments:
+      #   env:
+      #     HAB_LICENSE: accept-no-persist

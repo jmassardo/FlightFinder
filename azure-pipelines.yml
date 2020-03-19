@@ -27,7 +27,10 @@ stages:
       - publish: $(System.DefaultWorkingDirectory)/results
         artifact: hart
       - task: vsts-habitat-pkg-export@3
+        displayName: 'Export HART to Docker'
         inputs:
           habitatOrigin: 'bldr'
           habitatExportFormat: 'docker'
           habitatPackagePath: '$(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart'
+        env:
+          HAB_LICENSE: accept-no-persist

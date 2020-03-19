@@ -42,6 +42,6 @@ stages:
         displayName: 'Upload to Docker Hub'
         inputs:
           containerRegistry: 'dockerhub'
-          repository: 'flightfinder'
+          repository: 'jmassardo/flightfinder'
           command: 'push'
           tags: 'latest'

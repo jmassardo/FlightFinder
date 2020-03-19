@@ -31,10 +31,17 @@ stages:
         displayName: 'Export HART to Docker'
         env:
           HAB_LICENSE: accept-no-persist
-      
       - task: Docker@2
+        displayName: 'Upload to ACS'
         inputs:
           containerRegistry: 'acs'
+          repository: 'flightfinder'
+          command: 'push'
+          tags: 'latest'
+      - task: Docker@2
+        displayName: 'Upload to Docker Hub'
+        inputs:
+          containerRegistry: 'dockerhub'
           repository: 'flightfinder'
           command: 'push'
           tags: 'latest'

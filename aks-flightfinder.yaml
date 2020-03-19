@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flightfinder
+  labels:
+    app: flightfinder
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: flightfinder
+      labels:
+        app: flightfinder
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": windows
+      containers:
+      - name: flightfinder
+        image: jrmregistry.azurecr.io/jmassardo/flightfinder
+        resources:
+          limits:
+            cpu: 1
+            memory: 800M
+          requests:
+            cpu: .1
+            memory: 300M
+        ports:
+          - containerPort: 80
+        env:
+        - name: HAB_LICENSE
+          value: "accept"
+  selector:
+    matchLabels:
+      app: flightfinder
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flightfinder
+spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+  selector:
+    app: flightfinder

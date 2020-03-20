@@ -6,7 +6,7 @@ stages:
     jobs:
     - job: Build
       pool:
-        name: windows-2019
+        vmImage: 'windows-latest'
       continueOnError: true
       steps:
       - task: vsts-habitat-install@3

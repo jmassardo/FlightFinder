@@ -45,3 +45,10 @@ stages:
           repository: 'jmassardo/flightfinder'
           command: 'push'
           tags: 'latest'
+      - task: Docker@2
+        displayName: 'Upload to GCR'
+        inputs:
+          containerRegistry: 'GCR'
+          repository: 'jmassardo/flightfinder'
+          command: 'push'
+          tags: 'latest'

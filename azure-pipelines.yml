@@ -50,6 +50,6 @@ stages:
         displayName: 'Upload to GCR'
         inputs:
           containerRegistry: 'GCR'
-          repository: 'jmassardo/flightfinder'
+          repository: 'flightfinder'
           command: 'push'
           tags: 'latest'

@@ -28,7 +28,7 @@ stages:
           . $(System.DefaultWorkingDirectory)/results/last_build.ps1
           C:\ProgramData\habitat\hab.exe pkg export docker $(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart
           docker tag jmassardo/flightfinder jrmregistry.azurecr.io/flightfinder
-          docker tag jmassardo/flightfinder gcr.io/flightfinder
+          docker tag jmassardo/flightfinder gcr.io/habitat-kubernetes-playland/flightfinder
         displayName: 'Export HART to Docker'
         env:
           HAB_LICENSE: accept-no-persist
@@ -50,6 +50,6 @@ stages:
         displayName: 'Upload to GCR'
         inputs:
           containerRegistry: 'GCR'
-          repository: 'flightfinder'
+          repository: 'habitat-kubernetes-playland/flightfinder'
           command: 'push'
           tags: 'latest'

@@ -9,6 +9,7 @@ stages:
         vmImage: 'windows-latest'
       continueOnError: true
       steps:
+      - powershell: systeminfo
       - task: vsts-habitat-install@3
       - task: vsts-habitat-signing-key@3
         displayName: 'Signing Origin Key: install'

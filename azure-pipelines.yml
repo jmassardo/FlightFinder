@@ -25,14 +25,6 @@ stages:
         displayName: 'Expose Habitat Build Variables'
         inputs:
           habitatSetBuildNumber: true
-      - task: vsts-habitat-pkg-upload@3
-        displayName: 'Upload Package to BLDR'
-        inputs:
-          habitatOrigin: bldr
-          habitatPackagePath: '$(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart'
-          habitatPackageChannel: dev
-        env:
-          HAB_LICENSE: accept-no-persist
       - powershell: |
           . $(System.DefaultWorkingDirectory)/results/last_build.ps1
           C:\ProgramData\habitat\hab.exe pkg export docker $(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart

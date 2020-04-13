@@ -39,7 +39,7 @@ stages:
           containerRegistry: 'acs'
           repository: 'flightfinder'
           command: 'push'
-          tags: 'latest'
+          tags: ${pkg_version}
       - task: Docker@2
         displayName: 'Upload to Docker Hub'
         inputs:

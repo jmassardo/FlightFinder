@@ -25,6 +25,14 @@ stages:
         displayName: 'Expose Habitat Build Variables'
         inputs:
           habitatSetBuildNumber: true
+      - task: vsts-habitat-pkg-upload@3
+        displayName: 'Package Upload'
+        inputs:
+          habitatOrigin: bldr
+          habitatPackagePath: '$(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart'
+          habitatPackageChannel: dev
+        env:
+          HAB_LICENSE: accept-no-persist
       - powershell: |
           . $(System.DefaultWorkingDirectory)/results/last_build.ps1
           C:\ProgramData\habitat\hab.exe pkg export docker $(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart
@@ -53,9 +61,9 @@ stages:
           containerRegistry: 'GCR'
           repository: 'habitat-kubernetes-playland/flightfinder'
           command: 'push'
-          tags: 'latest'
+          tags: $(Build.BuildNumber)
 
-  - stage: DeployToDev
+  - stage: DeployToAKS
     jobs:
     - deployment: deployment
       pool:
@@ -66,10 +74,30 @@ stages:
           deploy:
             steps:
             - task: Kubernetes@1
+              displayName: Deploy to AKS
               inputs:
                 connectionType: 'Kubernetes Service Connection'
                 kubernetesServiceEndpoint: 'jrm-flightfinder'
                 command: 'set'
                 arguments: 'image deployment/flightfinder flightfinder=jrmregistry.azurecr.io/flightfinder:$(Build.BuildNumber) --record'
+                secretType: 'dockerRegistry'
+                containerRegistryType: 'Azure Container Registry'
+  - stage: DeployToGKE
+    jobs:
+    - deployment: deployment
+      pool:
+        vmImage: 'windows-latest'
+      environment: 'dev'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: Kubernetes@1
+              displayName: Deploy to AKS
+              inputs:
+                connectionType: 'Kubernetes Service Connection'
+                kubernetesServiceEndpoint: 'jrm-flightfinder'
+                command: 'set'
+                arguments: 'image deployment/flightfinder flightfinder-server=gcr.io/habitat-kubernetes-playland/flightfinder:$(Build.BuildNumber) --record'
                 secretType: 'dockerRegistry'
                 containerRegistryType: 'Azure Container Registry'

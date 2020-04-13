@@ -92,4 +92,6 @@ stages:
                 command: 'set'
                 arguments: 'image deployment/flightfinder flightfinder-server=gcr.io/habitat-kubernetes-playland/flightfinder:$(Build.BuildNumber) --record'
                 secretType: 'dockerRegistry'
-                containerRegistryType: 'Azure Container Registry'
+                containerRegistryType: 'Container Registry'
+                dockerRegistryEndpoint: 'gcr'
+                versionSpec: '1.16.6'

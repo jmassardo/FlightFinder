@@ -85,10 +85,10 @@ stages:
           deploy:
             steps:
             - task: Kubernetes@1
-              displayName: Deploy to AKS
+              displayName: Deploy to GKE
               inputs:
                 connectionType: 'Kubernetes Service Connection'
-                kubernetesServiceEndpoint: 'jrm-flightfinder'
+                kubernetesServiceEndpoint: 'gke'
                 command: 'set'
                 arguments: 'image deployment/flightfinder flightfinder-server=gcr.io/habitat-kubernetes-playland/flightfinder:$(Build.BuildNumber) --record'
                 secretType: 'dockerRegistry'

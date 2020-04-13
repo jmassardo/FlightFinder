@@ -70,6 +70,6 @@ stages:
                 connectionType: 'Kubernetes Service Connection'
                 kubernetesServiceEndpoint: 'jrm-flightfinder'
                 command: 'set'
-                arguments: 'image deployment/flightfinder flightfinder=jrmregistry.azurecr.io/jmassardo/flightfinder:$(Build.BuildNumber) --record'
+                arguments: 'image deployment/flightfinder flightfinder=jrmregistry.azurecr.io/flightfinder:$(Build.BuildNumber) --record'
                 secretType: 'dockerRegistry'
                 containerRegistryType: 'Azure Container Registry'

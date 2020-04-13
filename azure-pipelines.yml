@@ -26,7 +26,7 @@ stages:
         inputs:
           habitatSetBuildNumber: true
       - task: vsts-habitat-pkg-upload@3
-        displayName: 'Package Upload'
+        displayName: 'Upload Package to BLDR'
         inputs:
           habitatOrigin: bldr
           habitatPackagePath: '$(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart'
@@ -37,7 +37,7 @@ stages:
           . $(System.DefaultWorkingDirectory)/results/last_build.ps1
           C:\ProgramData\habitat\hab.exe pkg export docker $(System.DefaultWorkingDirectory)/results/jmassardo-flightfinder-$(Build.BuildNumber)-x86_64-windows.hart
           docker tag jmassardo/flightfinder jrmregistry.azurecr.io/flightfinder:$(Build.BuildNumber)
-          docker tag jmassardo/flightfinder gcr.io/habitat-kubernetes-playland/flightfinder
+          docker tag jmassardo/flightfinder gcr.io/habitat-kubernetes-playland/flightfinder:$(Build.BuildNumber)
         displayName: 'Export HART to Docker'
         env:
           HAB_LICENSE: accept-no-persist
@@ -54,7 +54,7 @@ stages:
           containerRegistry: 'dockerhub'
           repository: 'jmassardo/flightfinder'
           command: 'push'
-          tags: 'latest'
+          tags: $(Build.BuildNumber)
       - task: Docker@2
         displayName: 'Upload to GCR'
         inputs:

@@ -39,7 +39,7 @@ stages:
           containerRegistry: 'acs'
           repository: 'flightfinder'
           command: 'push'
-          tags: ${pkg_version}
+          tags: $(Build.BuildNumber)
       - task: Docker@2
         displayName: 'Upload to Docker Hub'
         inputs:
@@ -70,6 +70,6 @@ stages:
                 connectionType: 'Kubernetes Service Connection'
                 kubernetesServiceEndpoint: 'jrm-flightfinder'
                 command: 'set'
-                arguments: 'image deployment/flightfinder flightfinder=jrmregistry.azurecr.io/jmassardo/flightfinder:0.1.0 --record'
+                arguments: 'image deployment/flightfinder flightfinder=jrmregistry.azurecr.io/jmassardo/flightfinder:$(Build.BuildNumber) --record'
                 secretType: 'dockerRegistry'
                 containerRegistryType: 'Azure Container Registry'

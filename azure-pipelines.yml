@@ -54,3 +54,22 @@ stages:
           repository: 'habitat-kubernetes-playland/flightfinder'
           command: 'push'
           tags: 'latest'
+
+  - stage: DeployToDev
+    jobs:
+    - deployment: deployment
+      pool:
+        vmImage: 'windows-latest'
+      environment: 'dev'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: Kubernetes@1
+              inputs:
+                connectionType: 'Kubernetes Service Connection'
+                kubernetesServiceEndpoint: 'jrm-flightfinder'
+                command: 'set'
+                arguments: 'image deployment/flightfinder flightfinder=jrmregistry.azurecr.io/jmassardo/flightfinder:0.1.0 --record'
+                secretType: 'dockerRegistry'
+                containerRegistryType: 'Azure Container Registry'

@@ -9,6 +9,7 @@ jobs:
     # outputs:
     #   output1: ${{ steps.artifact-upload-step.outputs.artifact-id }}
     steps:
+      - uses: actions/checkout@v3
       - name: Build package
         run: |
           ls -al

@@ -24,6 +24,11 @@ jobs:
     needs: build
     steps:
       - name: Get Artifact URL
-        run: echo "Artifact URL from previous job is $ARTIFACTURL"
+        run: |
+          echo "Artifact URL from previous job is $ARTIFACTURL"
+          echo "Attempting to fetch artifact"
+          curl -O $ARTIFACTURL
+          echo "Now listing the directory contents"
+          ls -al
         env:
           ARTIFACTURL: ${{needs.build.outputs.artifacturl}}

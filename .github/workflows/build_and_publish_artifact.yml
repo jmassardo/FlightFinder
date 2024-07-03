@@ -4,27 +4,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  job1:
+  build:
     runs-on: ubuntu-latest
-    # outputs:
-    #   output1: ${{ steps.artifact-upload-step.outputs.artifact-id }}
+    outputs:
+      artifacturl: ${{ steps.artifact-upload-step.outputs.artifact-url }}
     steps:
       - uses: actions/checkout@v3
       - name: Build package
         run: |
-          ls -al
           dotnet restore FlightFinder.sln
           dotnet build FlightFinder.sln
-          ls -al
-  #     - uses: actions/upload-artifact@v4
-  #       id: artifact-upload-step
-  #       with:
-  #       name: my-artifact
-  #       path: path/to/artifact/content/
-  # job2:
-  #   runs-on: ubuntu-latest
-  #   needs: job1
-  #   steps:
-  #     - env:
-  #       OUTPUT1: ${{needs.job1.outputs.output1}}
-  #     run: echo "Artifact ID from previous job is $OUTPUT1"
+      - uses: actions/upload-artifact@v4
+        id: artifact-upload-step
+        with:
+          name: dotnet-binary
+          path: \FlightFinder.Server\FlightFinder.Server.csproj
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Get Artifact URL
+        run: echo "Artifact URL from previous job is $ARTIFACTURL"
+        env:
+          ARTIFACTURL: ${{needs.build.outputs.artifacturl}}

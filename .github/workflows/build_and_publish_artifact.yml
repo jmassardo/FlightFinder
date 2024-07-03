@@ -6,15 +6,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # This output makes the artifact URL available for steps in other jobs.
     outputs:
       artifacturl: ${{ steps.artifact-upload-step.outputs.artifact-url }}
     steps:
+      # Checkout the repo so we can do the build
       - uses: actions/checkout@v3
+      # Perform the actual build
       - name: Build package
         run: |
           dotnet restore FlightFinder.sln
           dotnet build FlightFinder.sln
+      # Upload the artifact to GitHub.
       - uses: actions/upload-artifact@v4
+        # Make sure this ID is the same here as it is in the output above.
         id: artifact-upload-step
         with:
           name: dotnet-binary
@@ -23,21 +28,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      # - name: Download artifact
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: dotnet-binary
-      #     path: ./download
-      - name: Get Artifact URL
+      # This step uses the ARTIFACTURL env variable to fetch the artfact in zip format.
+      # It requires the `/zip` suffix to tell GitHub to send us the zip file and not the individual files.
+      - name: Get Artifact
         run: |
-          echo "Pre fetch directory listing"
-          ls -al
-          find .
           echo "Artifact URL from previous job is $ARTIFACTURL"
           echo "Attempting to fetch artifact"
-          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -L -o artifact.zip "{$ARTIFACTURL}/zip" 
+          curl -H "Accept: application/vnd.github+json" \
+               -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -L -o artifact.zip "{$ARTIFACTURL}/zip" 
           echo "Now listing the directory contents"
           ls -al
-          find .
         env:
+          # This is the output from the previous job. Make sure the job name and the output name are correct.
           ARTIFACTURL: ${{needs.build.outputs.artifacturl}}

@@ -29,6 +29,6 @@ jobs:
           echo "Attempting to fetch artifact"
           curl -O $ARTIFACTURL
           echo "Now listing the directory contents"
-          ls -al
+          find .
         env:
           ARTIFACTURL: ${{needs.build.outputs.artifacturl}}

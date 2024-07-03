@@ -18,7 +18,7 @@ jobs:
         id: artifact-upload-step
         with:
           name: dotnet-binary
-          path: \FlightFinder.Server\FlightFinder.Server.csproj
+          path: ./FlightFinder.Server/FlightFinder.Server.csproj
   publish:
     runs-on: ubuntu-latest
     needs: build

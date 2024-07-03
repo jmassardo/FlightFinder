@@ -23,12 +23,21 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dotnet-binary
+          path: ./dotnet-binary.zip  
       - name: Get Artifact URL
         run: |
+          echo "Pre fetch directory listing"
+          ls -al
+          find .
           echo "Artifact URL from previous job is $ARTIFACTURL"
           echo "Attempting to fetch artifact"
           curl -O $ARTIFACTURL
           echo "Now listing the directory contents"
+          ls -al
           find .
         env:
           ARTIFACTURL: ${{needs.build.outputs.artifacturl}}

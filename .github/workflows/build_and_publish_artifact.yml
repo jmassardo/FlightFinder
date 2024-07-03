@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Build package
         run: |
+          ls -al
           dotnet restore FlightFinder.sln
           dotnet build FlightFinder.sln
           ls -al
